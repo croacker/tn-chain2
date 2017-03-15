@@ -1,12 +1,27 @@
-// Learn more on how to config.
-// - https://github.com/ant-tool/atool-build#配置扩展
+var path = require('path');
 
-module.exports = function(webpackConfig) {
-  webpackConfig.babel.plugins.push('transform-runtime');
-  webpackConfig.babel.plugins.push(['import', {
-    libraryName: 'antd',
-    style: 'css',
-  }]);
+var node_dir = __dirname + '/node_modules';
 
-  return webpackConfig;
+module.exports = {
+    entry: './src/main/js/app.js',
+    devtool: 'sourcemaps',
+    cache: true,
+    debug: true,
+    output: {
+        path: __dirname,
+        filename: './src/main/resources/static/built/bundle.js'
+    },
+    module: {
+        loaders: [
+            {
+                test: path.join(__dirname, '.'),
+                exclude: /(node_modules)/,
+                loader: 'babel-loader',
+                query: {
+                    cacheDirectory: true,
+                    presets: ['es2015', 'react']
+                }
+            }
+        ]
+    }
 };
