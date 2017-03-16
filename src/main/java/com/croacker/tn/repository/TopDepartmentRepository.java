@@ -11,7 +11,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 /**
  *
  */
-@RepositoryRestResource(collectionResourceRel = "topdepartment", path = "topdepartment")
+@RepositoryRestResource(collectionResourceRel = "topdepartments", path = "topdepartments")
 public interface TopDepartmentRepository extends JpaRepository<TopDepartment, String> {
 
     @Query(value = "select distinct topDepartment from TopDepartment topDepartment where lower(topDepartment.description) = lower(?1)",

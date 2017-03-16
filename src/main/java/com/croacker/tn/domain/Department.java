@@ -2,6 +2,7 @@ package com.croacker.tn.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -10,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -25,6 +27,25 @@ public class Department extends AbstractDictionaryEntity {
     @Getter
     @Setter
     private AbstractDictionaryEntity owner;
+
+    @Basic
+    @Column(name = "r_creation_date")
+//    @Type(type="date")
+    @Getter @Setter
+    private String creationDate;
+
+    @Basic
+    @Column(name = "r_modify_date")
+//    @Type(type="timestamp")
+    @Getter @Setter
+    private String modifyDate;
+
+    @Basic
+    @Column(name = "cabinet_id")
+    @Getter
+    @Setter
+    private String cabinetId;
+
 
     /**
      * id родительского объекта
