@@ -74,7 +74,7 @@
 	
 	        var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 	
-	        _this.state = { employees: [], attributes: [], pageSize: 2, links: {} };
+	        _this.state = { departments: [], attributes: [], pageSize: 2, links: {} };
 	        _this.updatePageSize = _this.updatePageSize.bind(_this);
 	        _this.onCreate = _this.onCreate.bind(_this);
 	        _this.onUpdate = _this.onUpdate.bind(_this);
@@ -91,18 +91,18 @@
 	        value: function loadFromServer(pageSize) {
 	            var _this2 = this;
 	
-	            follow(client, root, [{ rel: 'employees', params: { size: pageSize } }]).then(function (employeeCollection) {
+	            follow(client, root, [{ rel: 'departments', params: { size: pageSize } }]).then(function (departmentCollection) {
 	                return client({
 	                    method: 'GET',
-	                    path: employeeCollection.entity._links.profile.href,
+	                    path: departmentCollection.entity._links.profile.href,
 	                    headers: { 'Accept': 'application/schema+json' }
 	                }).then(function (schema) {
 	                    _this2.schema = schema.entity;
-	                    _this2.links = employeeCollection.entity._links;
-	                    return employeeCollection;
+	                    _this2.links = departmentCollection.entity._links;
+	                    return departmentCollection;
 	                });
-	            }).then(function (employeeCollection) {
-	                return employeeCollection.entity._embedded.employees.map(function (employee) {
+	            }).then(function (departmentCollection) {
+	                return departmentCollection.entity._embedded.departments.map(function (employee) {
 	                    return client({
 	                        method: 'GET',
 	                        path: employee._links.self.href
@@ -110,9 +110,9 @@
 	                });
 	            }).then(function (employeePromises) {
 	                return when.all(employeePromises);
-	            }).done(function (employees) {
+	            }).done(function (departments) {
 	                _this2.setState({
-	                    employees: employees,
+	                    departments: departments,
 	                    attributes: Object.keys(_this2.schema.properties),
 	                    pageSize: pageSize,
 	                    links: _this2.links
@@ -127,7 +127,7 @@
 	        key: 'onCreate',
 	        value: function onCreate(newEmployee) {
 	            var self = this;
-	            follow(client, root, ['employees']).then(function (response) {
+	            follow(client, root, ['departments']).then(function (response) {
 	                return client({
 	                    method: 'POST',
 	                    path: response.entity._links.self.href,
@@ -135,7 +135,7 @@
 	                    headers: { 'Content-Type': 'application/json' }
 	                });
 	            }).then(function (response) {
-	                return follow(client, root, [{ rel: 'employees', params: { 'size': self.state.pageSize } }]);
+	                return follow(client, root, [{ rel: 'departments', params: { 'size': self.state.pageSize } }]);
 	            }).done(function (response) {
 	                self.onNavigate(response.entity._links.last.href);
 	            });
@@ -190,10 +190,10 @@
 	            client({
 	                method: 'GET',
 	                path: navUri
-	            }).then(function (employeeCollection) {
-	                _this5.links = employeeCollection.entity._links;
+	            }).then(function (departmentCollection) {
+	                _this5.links = departmentCollection.entity._links;
 	
-	                return employeeCollection.entity._embedded.employees.map(function (employee) {
+	                return departmentCollection.entity._embedded.departments.map(function (employee) {
 	                    return client({
 	                        method: 'GET',
 	                        path: employee._links.self.href
@@ -201,9 +201,9 @@
 	                });
 	            }).then(function (employeePromises) {
 	                return when.all(employeePromises);
-	            }).done(function (employees) {
+	            }).done(function (departments) {
 	                _this5.setState({
-	                    employees: employees,
+	                    departments: departments,
 	                    attributes: Object.keys(_this5.schema.properties),
 	                    pageSize: _this5.state.pageSize,
 	                    links: _this5.links
@@ -239,7 +239,7 @@
 	                'div',
 	                null,
 	                React.createElement(CreateDialog, { attributes: this.state.attributes, onCreate: this.onCreate }),
-	                React.createElement(EmployeeList, { employees: this.state.employees,
+	                React.createElement(EmployeeList, { departments: this.state.departments,
 	                    links: this.state.links,
 	                    pageSize: this.state.pageSize,
 	                    attributes: this.state.attributes,
@@ -498,7 +498,7 @@
 	        value: function render() {
 	            var _this12 = this;
 	
-	            var employees = this.props.employees.map(function (employee) {
+	            var departments = this.props.departments.map(function (employee) {
 	                return React.createElement(Employee, { key: employee.entity._links.self.href,
 	                    employee: employee,
 	                    attributes: _this12.props.attributes,
@@ -567,7 +567,7 @@
 	                            React.createElement('th', null),
 	                            React.createElement('th', null)
 	                        ),
-	                        employees
+	                        departments
 	                    )
 	                ),
 	                React.createElement(
@@ -613,12 +613,12 @@
 	                React.createElement(
 	                    'td',
 	                    null,
-	                    this.props.employee.entity.firstName
+	                    this.props.employee.entity.hidden
 	                ),
 	                React.createElement(
 	                    'td',
 	                    null,
-	                    this.props.employee.entity.lastName
+	                    this.props.employee.entity.objectType
 	                ),
 	                React.createElement(
 	                    'td',

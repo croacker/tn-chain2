@@ -13,7 +13,7 @@ class App extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {employees: [], attributes: [], pageSize: 2, links: {}};
+        this.state = {departments: [], attributes: [], pageSize: 10, links: {}};
         this.updatePageSize = this.updatePageSize.bind(this);
         this.onCreate = this.onCreate.bind(this);
         this.onUpdate = this.onUpdate.bind(this);
@@ -24,19 +24,19 @@ class App extends React.Component {
     // tag::follow-2[]
     loadFromServer(pageSize) {
         follow(client, root, [
-            {rel: 'employees', params: {size: pageSize}}]
-        ).then(employeeCollection => {
+            {rel: 'departments', params: {size: pageSize}}]
+        ).then(departmentCollection => {
             return client({
                 method: 'GET',
-                path: employeeCollection.entity._links.profile.href,
+                path: departmentCollection.entity._links.profile.href,
                 headers: {'Accept': 'application/schema+json'}
             }).then(schema => {
                 this.schema = schema.entity;
-        this.links = employeeCollection.entity._links;
-        return employeeCollection;
+        this.links = departmentCollection.entity._links;
+        return departmentCollection;
     });
-    }).then(employeeCollection => {
-            return employeeCollection.entity._embedded.employees.map(employee =>
+    }).then(departmentCollection => {
+            return departmentCollection.entity._embedded.departments.map(employee =>
             client({
                 method: 'GET',
                 path: employee._links.self.href
@@ -44,9 +44,9 @@ class App extends React.Component {
     );
     }).then(employeePromises => {
             return when.all(employeePromises);
-    }).done(employees => {
+    }).done(departments => {
             this.setState({
-            employees: employees,
+            departments: departments,
             attributes: Object.keys(this.schema.properties),
             pageSize: pageSize,
             links: this.links
@@ -58,7 +58,7 @@ class App extends React.Component {
     // tag::create[]
     onCreate(newEmployee) {
         var self = this;
-        follow(client, root, ['employees']).then(response => {
+        follow(client, root, ['departments']).then(response => {
             return client({
                 method: 'POST',
                 path: response.entity._links.self.href,
@@ -66,7 +66,7 @@ class App extends React.Component {
                 headers: {'Content-Type': 'application/json'}
             })
         }).then(response => {
-            return follow(client, root, [{rel: 'employees', params: {'size': self.state.pageSize}}]);
+            return follow(client, root, [{rel: 'departments', params: {'size': self.state.pageSize}}]);
     }).done(response => {
             self.onNavigate(response.entity._links.last.href);
     });
@@ -107,10 +107,10 @@ class App extends React.Component {
         client({
             method: 'GET',
             path: navUri
-        }).then(employeeCollection => {
-            this.links = employeeCollection.entity._links;
+        }).then(departmentCollection => {
+            this.links = departmentCollection.entity._links;
 
-        return employeeCollection.entity._embedded.employees.map(employee =>
+        return departmentCollection.entity._embedded.departments.map(employee =>
             client({
                 method: 'GET',
                 path: employee._links.self.href
@@ -118,9 +118,9 @@ class App extends React.Component {
     );
     }).then(employeePromises => {
             return when.all(employeePromises);
-    }).done(employees => {
+    }).done(departments => {
             this.setState({
-            employees: employees,
+            departments: departments,
             attributes: Object.keys(this.schema.properties),
             pageSize: this.state.pageSize,
             links: this.links
@@ -147,7 +147,7 @@ class App extends React.Component {
         return (
             <div>
             <CreateDialog attributes={this.state.attributes} onCreate={this.onCreate}/>
-    <EmployeeList employees={this.state.employees}
+    <EmployeeList departments={this.state.departments}
         links={this.state.links}
         pageSize={this.state.pageSize}
         attributes={this.state.attributes}
@@ -304,7 +304,7 @@ class EmployeeList extends React.Component {
     // end::handle-nav[]
     // tag::employee-list-render[]
     render() {
-        var employees = this.props.employees.map(employee =>
+        var departments = this.props.departments.map(employee =>
             <Employee key={employee.entity._links.self.href}
         employee={employee}
         attributes={this.props.attributes}
@@ -338,7 +338,7 @@ class EmployeeList extends React.Component {
         <th></th>
         <th></th>
         </tr>
-        {employees}
+        {departments}
         </tbody>
         </table>
         <div>
@@ -365,8 +365,8 @@ class Employee extends React.Component {
     render() {
         return (
             <tr>
-            <td>{this.props.employee.entity.firstName}</td>
-        <td>{this.props.employee.entity.lastName}</td>
+            <td>{this.props.employee.entity.hidden}</td>
+        <td>{this.props.employee.entity.objectType}</td>
         <td>{this.props.employee.entity.description}</td>
         <td>
         <UpdateDialog employee={this.props.employee}

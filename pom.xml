@@ -65,7 +65,7 @@
                             <goal>install-file</goal>
                         </goals>
                         <configuration>
-                            <file>${project.basedir}/lib/oracle/ojdbc/7/ojdbc7.jar</file>
+                            <file>lib/oracle/ojdbc/7/ojdbc-7.jar</file>
                             <groupId>oracle</groupId>
                             <artifactId>ojdbc</artifactId>
                             <version>7</version>
