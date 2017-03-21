@@ -8,5 +8,5 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  *
  */
 @RepositoryRestResource(collectionResourceRel = "departmentpositions", path = "departmentpositions")
-public interface DepartmentPositionRepository  extends JpaRepository<DepartmentPosition, String> {
+public interface DepartmentPositionRepository extends JpaRepository<DepartmentPosition, String> {
 }
