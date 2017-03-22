@@ -12,7 +12,7 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name = "croc_commission_performer_sp") // TODO
+@Table(name = "croc_commission_performer_sp") // TODO relations
 public class CommissionPerformer extends AbstractEntiry {
 
     @Basic

@@ -6,23 +6,26 @@ import lombok.Setter;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
  *
  */
 @Entity
-@Table(name = "croc_document_topic_sp")//TODO relations
-public class DocumentTopic extends AbstractEntiry{
+@Table(name = "crc_dockind_group_sp")
+public class DockindGroup extends AbstractDictionaryEntity {
 
     @Basic
-    @Column(name = "r_object_type")
+    @Column(name = "object_name")
     @Getter
     @Setter
-    private String objectType;
+    private String objectName;
+
+        @Basic
+    @Column(name = "subject")
+    @Getter
+    @Setter
+    private String subject;
 
     @Basic
     @Column(name = "r_creation_date")
@@ -37,15 +40,5 @@ public class DocumentTopic extends AbstractEntiry{
     @Getter @Setter
     private String modifyDate;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "topic_id")
-    @Getter
-    @Setter
-    private Topic topic;
 
-    @Basic
-    @Column(name = "document_id")
-    @Getter
-    @Setter
-    private String documentId;
 }
