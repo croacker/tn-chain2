@@ -332,8 +332,8 @@ class EmployeeList extends React.Component {
     <table>
         <tbody>
         <tr>
-        <th>First Name</th>
-        <th>Last Name</th>
+        <th>Id</th>
+        <th>Object type</th>
         <th>Description</th>
         <th></th>
         <th></th>
@@ -365,19 +365,19 @@ class Employee extends React.Component {
     render() {
         return (
             <tr>
-            <td>{this.props.employee.entity.hidden}</td>
-        <td>{this.props.employee.entity.objectType}</td>
-        <td>{this.props.employee.entity.description}</td>
-        <td>
-        <UpdateDialog employee={this.props.employee}
-        attributes={this.props.attributes}
-        onUpdate={this.props.onUpdate}/>
-    </td>
-        <td>
-        <button onClick={this.handleDelete}>Delete</button>
-        </td>
-        </tr>
-    )
+                <td>{this.props.employee.entity.hidden}</td>
+                <td>{this.props.employee.entity.objectType}</td>
+                <td>{this.props.employee.entity.description}</td>
+                <td>
+                    <UpdateDialog employee={this.props.employee}
+                    attributes={this.props.attributes}
+                    onUpdate={this.props.onUpdate}/>
+                </td>
+                <td>
+                    <button onClick={this.handleDelete}>Delete</button>
+                </td>
+            </tr>
+        )
     }
 }
 // end::employee[]
